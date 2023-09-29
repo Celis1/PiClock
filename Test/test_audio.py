@@ -13,6 +13,14 @@ yt = pytube.YouTube(video_url)
 # Choose the audio stream with the highest quality
 audio_stream = yt.streams.filter(only_audio=True, file_extension='mp4').first()
 
+# Get the title of the video
+video_title = yt.title
+print(video_title)
+
+# Get the author (uploader) of the video
+video_author = yt.author
+print(video_author)
+
 # Get the audio stream URL
 audio_url = audio_stream.url
 
