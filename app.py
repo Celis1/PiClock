@@ -79,6 +79,8 @@ class App():
 
     def _configure_root(self):
         self.root.title("PiClock")
+        # Make the window borderless (optional)
+        self.root.attributes('-fullscreen', True)
 
         self.style = ttk.Style(self.root)
 
