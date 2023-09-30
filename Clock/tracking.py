@@ -1,5 +1,5 @@
-import datetime
-import time
+from datetime import datetime, timedelta, time
+from time import sleep
 import pickle
 import os
 
@@ -11,6 +11,7 @@ class TrackingClock:
 
     def __init__(self):
         self.deadline_path = './DATA/TimeData/deadline.pkl'
+        self.startup_time = datetime.now()
 
 
     def get_deadline(self):
@@ -36,7 +37,7 @@ class TrackingClock:
         deadline: string of the deadline in the format of 'mm/dd/yyyy'
         '''
         deadline += ' 09:00:00'
-        parsed_date = datetime.datetime.strptime(deadline, "%m/%d/%Y %H:%M:%S")
+        parsed_date = datetime.strptime(deadline, "%m/%d/%Y %H:%M:%S")
 
         # TODO : might need to make this modular
         with open("./DATA/TimeData/deadline.pkl", "wb") as file:
@@ -73,13 +74,67 @@ class TrackingClock:
 
     @staticmethod
     def get_time():
-        current_datetime = datetime.datetime.now()
+        current_datetime = datetime.now()
         formatted_datetime = current_datetime.strftime(TrackingClock.TIME_FORMAT)
         return formatted_datetime
 
-    def progress():
+    def normalize(self, start_time, current_time, end_time):
+
+        # Calculate the total time range as a timedelta
+        total_time_range = end_time - start_time
+
+        # Calculate the time elapsed from start_time to current_time as a timedelta
+        time_elapsed = current_time - start_time
+        
+        # Calculate the normalized value as a float between 0 and 1
+        normalized_value = time_elapsed.total_seconds() / total_time_range.total_seconds()
+        
+        # Ensure the value is within the range [0, 1]
+        normalized_value = max(0.0, min(1.0, normalized_value))
+        
+        return normalized_value
+        
+    def initialize_progress(self):
         pass
 
+    def deadline_progress(self):
+        pass
+
+    def year_progress(self):
+        pass
+
+    def month_progress(self):
+        pass
+
+    def get_day_progress(self):
+        # Get the current date and time
+        now = datetime.now()
+
+        # Define the time ranges for 12 PM and 9 AM
+        twelve_pm = datetime.combine(now, time(12, 0, 0))
+        nine_am = datetime.combine(now, time(9, 0, 0))
+
+        # Check if the current time is between 12 PM and 9 AM
+        if twelve_pm <= now < nine_am:
+            # Calculate yesterday's date by subtracting one day from the current date
+            yesterday = now - timedelta(days=1)
+            tomorrow = now
+        else:
+            # Otherwise, use today's date
+            yesterday = now
+            tomorrow = nine_am + timedelta(days=1)
+
+        
+        # Create datetime objects for 9 AM of yesterday and today
+        yesterday_9am = datetime(yesterday.year, yesterday.month, yesterday.day, 9, 0, 0)
+        
+        # Calculate the time difference in hours
+        time_difference = now.hour - yesterday_9am.hour
+        
+        #normalizing the time for progress bar
+        norm_time = self.normalize(yesterday_9am, now, tomorrow)
+
+        return norm_time, time_difference
 
 
 
@@ -94,4 +149,5 @@ if __name__ == "__main__":
 
     while True:
         print(clock.get_time())
-        time.sleep(1)
+        print(clock.get_day_progress())
+        sleep(1)
