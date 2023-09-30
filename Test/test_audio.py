@@ -7,6 +7,7 @@ import vlc
 # Replace with the YouTube video URL you want to stream
 video_url = 'https://www.youtube.com/watch?v=YU-m46on_bQ'
 
+
 # Create a Pytube YouTube object
 yt = pytube.YouTube(video_url)
 
@@ -30,7 +31,7 @@ audio_url = audio_stream.url
 download_path = '/Users/celis/Projects/Kivy/PiClock/DATA/MusicData/Songs/GoldLink-Crew_REMIX.mp4'
 Instance = vlc.Instance("--no-video")
 player = Instance.media_player_new()
-Media = Instance.media_new(download_path)
+Media = Instance.media_new(audio_url)
 
 Media.get_mrl()
 player.set_media(Media)
