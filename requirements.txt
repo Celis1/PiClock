@@ -1,0 +1,5 @@
+pafy==0.5.5
+pygame==2.5.2
+python-vlc==3.0.18122
+pytube==15.0.0
+youtube-dl==2021.12.17
