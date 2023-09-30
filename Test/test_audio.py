@@ -49,8 +49,10 @@ player.audio_set_volume(initial_volume)
 player.set_time(110 * 1000)  # Time is specified in milliseconds
 
 # Wait for the video to finish
-while player.get_state() != vlc.State.Ended:
-    pass
+# while player.get_state() != vlc.State.Ended:
+#     pass
+
+time.sleep(10)
 
 # Release the media player
 player.release()

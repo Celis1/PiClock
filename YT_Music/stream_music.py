@@ -6,12 +6,17 @@ class MusicStreamer:
     def __init__(self) -> None:
         self.music_path = './DATA/MusicData'
         self.player = None
+        self.volumn = 100
 
     def set_volumn(self, volume):
         '''
         Function for setting the volume of the VLC media player
+
+        volume: int from 0 to 100
         '''
+        
         if self.player is not None:
+            self.volumn = volume
             self.player.audio_set_volume(volume)
         else:
             print('No player is currently running')
@@ -27,15 +32,16 @@ class MusicStreamer:
         self.player = self._create_vlc(audio_url)
         self.player.play()
 
+        self.player.audio_set_volume(self.volumn)
         # Set the start time to 1 minute (60 seconds)
         if start_time != 0:
             self.player.set_time(start_time * 1000)  # Time is specified in milliseconds
 
-        # TODO : this might need to be in a different spot to control 
         # Wait for the video to finish
-        while self.player.get_state() != vlc.State.Ended:
-            pass
+        # while self.player.get_state() != vlc.State.Ended:
+        #     pass
 
+    def stop_song(self):
         # Release the media player
         self.player.release()
         self.player = None
@@ -99,7 +105,9 @@ class MusicStreamer:
 
 
 if __name__ == "__main__":
+    import time
     streamer = MusicStreamer()
     download_url = 'https://www.youtube.com/watch?v=h8nIHZ-0kS4'
     streamer.play_song(download_url, 130)
+    time.sleep(10)
     # streamer.download_song(download_url)
