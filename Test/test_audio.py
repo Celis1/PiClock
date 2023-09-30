@@ -27,9 +27,10 @@ audio_url = audio_stream.url
 # Specify the full path to the VLC executable on macOS
 # vlc_path = "/Applications/VLC.app/Contents/MacOS/VLC"
 
-Instance = vlc.Instance()#(f"--no-xlib --quiet --fullscreen --ignore-config --plugin-path")
+download_path = '/Users/celis/Projects/Kivy/PiClock/DATA/MusicData/Songs/GoldLink-Crew_REMIX.mp4'
+Instance = vlc.Instance("--no-video")
 player = Instance.media_player_new()
-Media = Instance.media_new(audio_url)
+Media = Instance.media_new(download_path)
 
 Media.get_mrl()
 player.set_media(Media)
@@ -39,6 +40,10 @@ player.play()
 
 # Wait for the player to start
 time.sleep(1)
+
+# Define initial volume (0 to 100)
+initial_volume = 50
+player.audio_set_volume(initial_volume)
 
 # Set the start time to 1 minute (60 seconds)
 player.set_time(110 * 1000)  # Time is specified in milliseconds
