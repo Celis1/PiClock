@@ -1,0 +1,2 @@
+class SleepClock:
+    pass
