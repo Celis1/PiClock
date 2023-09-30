@@ -2,6 +2,7 @@ from Clock import TrackingClock
 from YT_Music import MusicStreamer
 
 import time
+from datetime import datetime
 
 
 class PiClock:
@@ -37,7 +38,7 @@ class PiClock:
         deadline_progress, deadline_left = self.clock.deadline_progress()
 
 
-        curr_hour = curr_time.hour
+        curr_hour = datetime.now().hour
 
         if curr_hour == self.wake_hour:
             self.wake_up()
