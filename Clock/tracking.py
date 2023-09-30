@@ -24,10 +24,9 @@ class TrackingClock:
 
         # check if the file exists
         if os.path.exists(self.deadline_path):
-            print('found deadline')
             with open(self.deadline_path, "rb") as file:
                 deadline = pickle.load(file)
-                return deadline
+                return deadline[0], deadline[1]
         else:
             print("Deadline file does not exist")
             return None
@@ -163,7 +162,6 @@ class TrackingClock:
         # create a datetime object for the first day of the month
         first_day = now.replace(day=1, hour=0, minute=0, second=0)
         last_day = now.replace(day=number_of_days, hour=23, minute=59, second=59)
-        print('debugging',number_of_days, first_day, now, last_day)
 
         # Calculate the normalized value
         days_left = number_of_days - current_day
@@ -173,6 +171,12 @@ class TrackingClock:
         return norm_value, days_left
 
     def get_day_progress(self):
+        def in_between(now, start, end):
+            if start <= end:
+                return start <= now < end
+            else: # over midnight
+                return start <= now or now < end
+            
         # Get the current date and time
         now = datetime.now()
 
@@ -180,25 +184,22 @@ class TrackingClock:
         twelve_pm = datetime.combine(now, time(12, 0, 0))
         nine_am = datetime.combine(now, time(9, 0, 0))
 
+        if in_between(now, twelve_pm, nine_am):
         # Check if the current time is between 12 PM and 9 AM
-        if twelve_pm <= now < nine_am:
             # Calculate yesterday's date by subtracting one day from the current date
-            yesterday = now - timedelta(days=1)
-            tomorrow = now
+            yesterday = now.replace(hour=9, minute=0, second=0) - timedelta(days=1)
+            tomorrow = now.replace(hour=9, minute=0, second=0)
         else:
             # Otherwise, use today's date
-            yesterday = now
-            tomorrow = nine_am + timedelta(days=1)
+            yesterday = now.replace(hour=9, minute=0, second=0)
+            tomorrow = now.replace(hour=9, minute=0, second=0) + timedelta(days=1)
 
         
-        # Create datetime objects for 9 AM of yesterday and today
-        yesterday_9am = datetime(yesterday.year, yesterday.month, yesterday.day, 9, 0, 0)
-        
         # Calculate the time difference in hours
-        time_difference = 24 - (now.hour - yesterday_9am.hour)
+        time_difference = (tomorrow.hour - now.hour)
         
         #normalizing the time for progress bar
-        norm_time = self.normalize(yesterday_9am, now, tomorrow)
+        norm_time = self.normalize(yesterday, now, tomorrow)
 
         return norm_time, time_difference
 
@@ -207,7 +208,7 @@ class TrackingClock:
 if __name__ == "__main__":
 
     clock = TrackingClock()
-    date_string = "7/23/2025"
+    date_string = "7/23/2024"
     clock.create_deadline(date_string)
 
     print('deadline')
@@ -216,8 +217,8 @@ if __name__ == "__main__":
 
     while True:
         print(clock.get_time())
-        print(clock.get_day_progress())
-        print(clock.month_progress())
-        print(clock.year_progress())
-        print(clock.deadline_progress())
+        print('day: ',clock.get_day_progress())
+        print('month: ',clock.month_progress())
+        print('year',clock.year_progress())
+        print('deadline',clock.deadline_progress())
         sleep(1)
