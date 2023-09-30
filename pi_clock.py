@@ -12,7 +12,7 @@ class PiClock:
     
         self.wake_hour = 7
         self.sleep_hour = 0
-        self.asleep = False
+        # self.asleep = False
 
         self.wake_url = 'https://www.youtube.com/watch?v=h8nIHZ-0kS4'
         self.sleep_url = 'https://www.youtube.com/watch?v=teIbh8hFQos'
@@ -36,6 +36,16 @@ class PiClock:
         year_progress, year_left = self.clock.year_progress()
         deadline_progress, deadline_left = self.clock.deadline_progress()
 
+
+        curr_hour = curr_time.hour
+
+        if curr_hour == self.wake_hour:
+            self.wake_up()
+        elif curr_hour == self.sleep_hour:
+            self.go_sleep()
+        else:
+            pass
+
         info = {
             'time': curr_time,
             'day_progress': day_progress,
@@ -50,12 +60,26 @@ class PiClock:
 
         return info
     
+    def check_time(self):
+        '''
+        Function for checking the time
+        '''
+        curr_time = self.clock.get_time()
+        curr_hour = curr_time.hour
+
+        if curr_hour == self.wake_hour:
+            self.wake_up()
+        elif curr_hour == self.sleep_hour:
+            self.go_sleep()
+        else:
+            pass
+    
     def wake_up(self):
         '''
         Function for waking up the user
         '''
-        if self.asleep:
-            self.asleep = False
+        # if self.asleep:
+        #     self.asleep = False
 
         self.yt_music.play_song(self.wake_url, 3)
         time.sleep(120)
@@ -63,8 +87,8 @@ class PiClock:
         
         
     def go_sleep(self):
-        if not self.asleep:
-            self.asleep = True
+        # if not self.asleep:
+        #     self.asleep = True
 
         self.yt_music.play_song(self.sleep_url, 3)
         time.sleep(29)
