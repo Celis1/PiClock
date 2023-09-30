@@ -173,7 +173,6 @@ class TrackingClock:
         return norm_value, days_left
 
     def get_day_progress(self):
-        # TODO : normalization is correct but the amount of hours left in the day is not!
         # Get the current date and time
         now = datetime.now()
 
@@ -196,7 +195,7 @@ class TrackingClock:
         yesterday_9am = datetime(yesterday.year, yesterday.month, yesterday.day, 9, 0, 0)
         
         # Calculate the time difference in hours
-        time_difference = yesterday_9am.hour - now.hour
+        time_difference = 24 - (now.hour - yesterday_9am.hour)
         
         #normalizing the time for progress bar
         norm_time = self.normalize(yesterday_9am, now, tomorrow)
