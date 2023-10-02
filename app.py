@@ -24,7 +24,6 @@ class App():
         self.create_labels()
         self.update_progress_bars()
 
-        # self.pi_clock.wake_up()
         # running tkinter mainloop
         self.root.mainloop()
 
@@ -42,7 +41,11 @@ class App():
             # round to nearest 2 decimal places
             value = round(value, 2)
             time_left = info[lebel_text.replace('progress', 'left')]
-            text = f'{label}: {time_left}'
+            # TODO : Come up with a better way to do this
+            if i == 0:
+                text = f'{label}:\nhours left {time_left}h'
+            else:
+                text = f'{label}:\ndays left {time_left}d'
 
             self.progress_bars[i].configure(amountused = value, subtext=text )
             self.progress_bars[i].update()
@@ -50,22 +53,9 @@ class App():
 
     def _configure_root(self):
         # self.style = ttk.Style(self.root)
-
-
         self.root.title("PiClock")
         # Make the window borderless (optional)
         self.root.attributes('-fullscreen', True)
-
-        # using 3rd party theme
-        self.root.call('source', 'Themes/sun-valley/sun-valley.tcl')
-        self.root.call('set_theme', 'dark')
-        # self.style.theme_use('clam') 
-
-        # self.style.configure("CustomTProgressbar",
-        #                      troughcolor ='blue', 
-        #                      background='green') 
-
-
 
         
     def create_labels(self):
