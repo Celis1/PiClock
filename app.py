@@ -37,7 +37,14 @@ class App():
         self.clock_label.config(text=info['time'])  
 
         for i, label in enumerate(self.progress_labels):
-            self.progress_bars[i]['value'] = info[label.lower().replace(' ', '_')] * 100
+            lebel_text = label.lower().replace(' ', '_')
+            value = info[lebel_text] * 100
+            # round to nearest 2 decimal places
+            value = round(value, 2)
+            time_left = info[lebel_text.replace('progress', 'left')]
+            text = f'{label}: {time_left}'
+
+            self.progress_bars[i].configure(amountused = value, subtext=text )
             self.progress_bars[i].update()
         self.root.after(10, self.update_progress_bars)
 
@@ -64,34 +71,32 @@ class App():
     def create_labels(self):
         # Create a label for displaying the time
         self.clock_label = ttk.Label(self.root, font=('Helvetica', 48))
-        self.clock_label.pack(pady=20)  # Add some padding to center the time label
-
+        # Add some padding to center the time label
+        self.clock_label.pack(pady=25)  
 
         # Create a frame for the progress bars
-        progress_frame = ttk.Frame(self.root )
+        progress_frame = ttk.Frame(self.root)
         progress_frame.pack(pady=20, padx=20, fill=ttk.X, side=ttk.BOTTOM, anchor=ttk.S)  # Stick to the bottom
-        
-        for label in self.progress_labels:
-            ttk.Label(progress_frame, text=label).pack()
-            progress_bar = ttk.Progressbar(progress_frame, 
-                                           orient='horizontal', length=300,
-                                           mode='determinate')
-            progress_bar.pack(pady=5, fill=ttk.X)
-            self.progress_bars.append(progress_bar)
 
-        # create meter widget
-        meter = ttk.Meter(self.root,
-                            metertype = 'semi',
-                            textright='%',
-                            # stripethickness = 5,
-                            subtext="miles per hour",
-                            textfont=('Helvetica', 25),
-                            subtextfont=('Helvetica', 12),
-                            amountused=65,
-                            metersize=180,
-                            meterthickness=15)
-        
-        meter.pack(pady=20, padx=20, fill=ttk.X, side=ttk.BOTTOM, anchor=ttk.S)
+        # Create a horizontal frame to hold the progress bars
+        horizontal_frame = ttk.Frame(progress_frame)
+        horizontal_frame.pack(fill=ttk.X)
+
+        color = ['primary', 'primary', 'primary', 'info']
+        for i, label in enumerate(self.progress_labels):
+            # Create meter widget
+            progress_bar = ttk.Meter(horizontal_frame,
+                                    metertype='semi',
+                                    textright='%',
+                                    subtext=label,
+                                    textfont=('Helvetica', 25),
+                                    subtextfont=('Helvetica', 16),
+                                    amountused=0.00,
+                                    metersize=350,
+                                    meterthickness=5,
+                                    bootstyle=color[i])
+            progress_bar.pack(fill="both", side=ttk.LEFT, padx=15)  # Pack horizontally with some padding
+            self.progress_bars.append(progress_bar)
 
 
 if __name__ == '__main__':
