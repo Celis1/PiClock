@@ -82,7 +82,7 @@ class App():
                                     textfont=('Helvetica', 25),
                                     subtextfont=('Helvetica', 16),
                                     amountused=0.00,
-                                    metersize=350,
+                                    metersize=175,
                                     meterthickness=5,
                                     bootstyle=color[i])
             progress_bar.pack(fill="both", side=ttk.LEFT, padx=15)  # Pack horizontally with some padding
