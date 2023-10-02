@@ -1,52 +1,15 @@
-import tkinter as tk
-from tkinter import ttk
+# import tkinter as tk
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
 from pi_clock import PiClock
 
-borderImageData = '''
-    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
-'''
 
 # TODO : need to inherit the tkinter class
 class App():
     
     def __init__(self) -> None:
-        self.root = tk.Tk()
+        self.root = ttk.Window(themename="darkly")
         self.pi_clock = PiClock()
 
         self.style = None
@@ -61,6 +24,7 @@ class App():
         self.create_labels()
         self.update_progress_bars()
 
+        # self.pi_clock.wake_up()
         # running tkinter mainloop
         self.root.mainloop()
 
@@ -73,49 +37,65 @@ class App():
         self.clock_label.config(text=info['time'])  
 
         for i, label in enumerate(self.progress_labels):
-            self.progress_bars[i]['value'] = info[label.lower().replace(' ', '_')] * 100
+            lebel_text = label.lower().replace(' ', '_')
+            value = info[lebel_text] * 100
+            # round to nearest 2 decimal places
+            value = round(value, 2)
+            time_left = info[lebel_text.replace('progress', 'left')]
+            text = f'{label}: {time_left}'
+
+            self.progress_bars[i].configure(amountused = value, subtext=text )
             self.progress_bars[i].update()
         self.root.after(10, self.update_progress_bars)
 
     def _configure_root(self):
+        # self.style = ttk.Style(self.root)
+
+
         self.root.title("PiClock")
         # Make the window borderless (optional)
         self.root.attributes('-fullscreen', True)
 
-        self.style = ttk.Style(self.root)
-
         # using 3rd party theme
-        self.root.call('source', 'Themes/azure/azure.tcl')
+        self.root.call('source', 'Themes/sun-valley/sun-valley.tcl')
         self.root.call('set_theme', 'dark')
+        # self.style.theme_use('clam') 
 
-        borderImage = tk.PhotoImage("borderImage", data=borderImageData)
+        # self.style.configure("CustomTProgressbar",
+        #                      troughcolor ='blue', 
+        #                      background='green') 
 
-        self.style.element_create("RoundedFrame",
-                        "image",
-                        borderImage,
-                        # ("focus", focusBorderImage),
-                        border=16,
-                        sticky="nsew")
-        
-        self.style.layout("RoundedFrame",
-                        [("RoundedFrame", {"sticky": "nsew"})])
+
+
         
     def create_labels(self):
         # Create a label for displaying the time
-        self.clock_label = tk.Label(self.root, font=('Helvetica', 48))
-        self.clock_label.pack(pady=20)  # Add some padding to center the time label
-
-
+        self.clock_label = ttk.Label(self.root, font=('Helvetica', 48))
+        # Add some padding to center the time label
+        self.clock_label.pack(pady=25)  
 
         # Create a frame for the progress bars
-        progress_frame = ttk.Frame(self.root, style="RoundedFrame" )
-        progress_frame.pack(pady=20, padx=20, fill=tk.X, side=tk.BOTTOM, anchor=tk.S)  # Stick to the bottom
-        
+        progress_frame = ttk.Frame(self.root)
+        progress_frame.pack(pady=20, padx=20, fill=ttk.X, side=ttk.BOTTOM, anchor=ttk.S)  # Stick to the bottom
 
-        for label in self.progress_labels:
-            tk.Label(progress_frame, text=label).pack()
-            progress_bar = ttk.Progressbar(progress_frame, orient='horizontal', length=300, mode='determinate')
-            progress_bar.pack(pady=5, fill=tk.X)
+        # Create a horizontal frame to hold the progress bars
+        horizontal_frame = ttk.Frame(progress_frame)
+        horizontal_frame.pack(fill=ttk.X)
+
+        color = ['primary', 'primary', 'primary', 'info']
+        for i, label in enumerate(self.progress_labels):
+            # Create meter widget
+            progress_bar = ttk.Meter(horizontal_frame,
+                                    metertype='semi',
+                                    textright='%',
+                                    subtext=label,
+                                    textfont=('Helvetica', 25),
+                                    subtextfont=('Helvetica', 16),
+                                    amountused=0.00,
+                                    metersize=350,
+                                    meterthickness=5,
+                                    bootstyle=color[i])
+            progress_bar.pack(fill="both", side=ttk.LEFT, padx=15)  # Pack horizontally with some padding
             self.progress_bars.append(progress_bar)
 
 

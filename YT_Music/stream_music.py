@@ -1,6 +1,8 @@
 import pytube
 import vlc
 import os
+from time import sleep
+import threading
 
 class MusicStreamer:
     def __init__(self) -> None:
@@ -21,7 +23,7 @@ class MusicStreamer:
         else:
             print('No player is currently running')
 
-    def play_song(self, youtube_url, start_time = 0):
+    def play_song(self, youtube_url, start_time = 0, end_time = 0):
         '''
         Function for streaming a song from YouTube
         - youtube_url: The URL of the YouTube video or the path of a downloaded mp3/mp4 file
@@ -36,6 +38,13 @@ class MusicStreamer:
         # Set the start time to 1 minute (60 seconds)
         if start_time != 0:
             self.player.set_time(start_time * 1000)  # Time is specified in milliseconds
+
+        if end_time != 0:
+            # Create a Timer object to execute the function after the delay
+            timer = threading.Timer(end_time, self.stop_song)
+
+            # Start the timer
+            timer.start()
 
         # Wait for the video to finish
         # while self.player.get_state() != vlc.State.Ended:
