@@ -2,6 +2,7 @@ from Clock import TrackingClock
 from YT_Music import MusicStreamer
 
 import time
+import threading
 from datetime import datetime
 
 
@@ -11,9 +12,10 @@ class PiClock:
         self.clock = TrackingClock()
         self.yt_music = MusicStreamer()
     
-        self.wake_hour = 7
-        self.sleep_hour = 0
-        # self.asleep = False
+        # TODO : add this to sleep clock class
+        self.wake_hour = datetime.now().replace(hour=7, minute=0)
+        self.sleep_hour = datetime.now().replace(hour=0, minute=30)
+        self.asleep = False
 
         self.wake_url = 'https://www.youtube.com/watch?v=h8nIHZ-0kS4'
         self.sleep_url = 'https://www.youtube.com/watch?v=teIbh8hFQos'
@@ -23,32 +25,29 @@ class PiClock:
         '''
         Function for starting the clock
         '''
-        # TODO : Add a function to play music
-        # check if your awake or asleep
-        pass
+        # TODO : add this to sleep clock class
+        curr_time = datetime.now()
+        if self.clock.in_between(curr_time, self.sleep_hour, self.wake_hour):
+            self.asleep = True
+        else:
+            self.asleep = False
 
     def update_time(self):
         '''
         Function for updating the time
         '''
-        curr_time = self.clock.get_time()
+        curr_formatted_time = self.clock.get_time()
         day_progress, day_left = self.clock.get_day_progress()
         month_progress, month_left = self.clock.month_progress()
         year_progress, year_left = self.clock.year_progress()
         deadline_progress, deadline_left = self.clock.deadline_progress()
 
 
-        curr_hour = datetime.now().hour
-
-        if curr_hour == self.wake_hour:
-            self.wake_up()
-        elif curr_hour == self.sleep_hour:
-            self.go_sleep()
-        else:
-            pass
+        # TODO: add this to sleep clock class
+        self.check_time()
 
         info = {
-            'time': curr_time,
+            'time': curr_formatted_time,
             'day_progress': day_progress,
             'day_left': day_left,
             'month_progress': month_progress,
@@ -65,13 +64,20 @@ class PiClock:
         '''
         Function for checking the time
         '''
-        curr_time = self.clock.get_time()
-        curr_hour = curr_time.hour
+        
+        # TODO: add this to sleep clock class
+        curr_time = datetime.now()
 
-        if curr_hour == self.wake_hour:
+        if (curr_time.minute == self.wake_hour.minute and
+        curr_time.hour == self.wake_hour.hour and self.asleep):
             self.wake_up()
-        elif curr_hour == self.sleep_hour:
+            self.asleep = False
+
+        elif (curr_time.minute == self.sleep_hour.minute and
+        curr_time.hour == self.sleep_hour.hour and not self.asleep):
             self.go_sleep()
+            self.asleep = True
+
         else:
             pass
     
@@ -79,20 +85,18 @@ class PiClock:
         '''
         Function for waking up the user
         '''
-        # if self.asleep:
-        #     self.asleep = False
-
+        # create a thread for playing music
         self.yt_music.play_song(self.wake_url, 3)
-        time.sleep(120)
+
+        # add more here
+
 
         
         
     def go_sleep(self):
-        # if not self.asleep:
-        #     self.asleep = True
+        self.yt_music.play_song(self.sleep_url, 3, 29)
 
-        self.yt_music.play_song(self.sleep_url, 3)
-        time.sleep(29)
+        # add more here
 
 
 
