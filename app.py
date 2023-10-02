@@ -17,6 +17,8 @@ class App():
         self.clock_label = None
         self.progress_labels = ['Day Progress', 'Month Progress', 'Year Progress', 'Deadline Progress']
         self.progress_bars = []
+
+        self.old_progress_vals = [0, 0, 0, 0]
                 
 
     def start(self):
@@ -40,15 +42,17 @@ class App():
             value = info[lebel_text] * 100
             # round to nearest 2 decimal places
             value = round(value, 2)
-            time_left = info[lebel_text.replace('progress', 'left')]
-            # TODO : Come up with a better way to do this
-            if i == 0:
-                text = f'{label}:\nhours left {time_left}h'
-            else:
-                text = f'{label}:\ndays left {time_left}d'
-
-            self.progress_bars[i].configure(amountused = value, subtext=text )
-            self.progress_bars[i].update()
+            # only update if the value has changed
+            if value != self.old_progress_vals[i]:
+                self.old_progress_vals[i] = value
+                time_left = info[lebel_text.replace('progress', 'left')]
+                # TODO : Come up with a better way to do this
+                if i == 0:
+                    text = f'{label}:\nhours left {time_left}h'
+                else:
+                    text = f'{label}:\ndays left {time_left}d'
+                self.progress_bars[i].configure(amountused = value, subtext=text )
+                self.progress_bars[i].update()
         self.root.after(10, self.update_progress_bars)
 
     def _configure_root(self):
@@ -82,7 +86,7 @@ class App():
                                     textfont=('Helvetica', 18),
                                     subtextfont=('Helvetica', 12),
                                     amountused=0.00,
-                                    metersize=175,
+                                    metersize=210,
                                     meterthickness=5,
                                     bootstyle=color[i])
             progress_bar.pack(fill="both", side=ttk.LEFT, padx=15)  # Pack horizontally with some padding
