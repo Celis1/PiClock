@@ -15,6 +15,8 @@ class TrackingClock:
         self.deadline_path = './DATA/TimeData/deadline.pkl'
         self.startup_time = datetime.now()
 
+        self.day_start = 9
+
 
     def get_deadline(self):
         '''
@@ -170,21 +172,22 @@ class TrackingClock:
 
         return norm_value, days_left
 
-    def get_day_progress(self):
-        def in_between(now, start, end):
-            if start <= end:
-                return start <= now < end
-            else: # over midnight
-                return start <= now or now < end
-            
+    @staticmethod
+    def in_between(now, start, end):
+        if start <= end:
+            return start <= now < end
+        else: # over midnight
+            return start <= now or now < end
+
+    def get_day_progress(self):            
         # Get the current date and time
         now = datetime.now()
 
         # Define the time ranges for 12 PM and 9 AM
-        twelve_pm = datetime.combine(now, time(12, 0, 0))
+        twelve_pm = datetime.combine(now, time(0, 0, 0))
         nine_am = datetime.combine(now, time(9, 0, 0))
 
-        if in_between(now, twelve_pm, nine_am):
+        if self.in_between(now, twelve_pm, nine_am):
         # Check if the current time is between 12 PM and 9 AM
             # Calculate yesterday's date by subtracting one day from the current date
             yesterday = now.replace(hour=9, minute=0, second=0) - timedelta(days=1)
@@ -196,7 +199,7 @@ class TrackingClock:
 
         
         # Calculate the time difference in hours
-        time_difference = (tomorrow.hour - now.hour)
+        time_difference = 24 - abs(twelve_pm.hour - now.hour) + self.day_start
         
         #normalizing the time for progress bar
         norm_time = self.normalize(yesterday, now, tomorrow)
