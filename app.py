@@ -1,5 +1,6 @@
-import tkinter as tk
-from tkinter import ttk
+# import tkinter as tk
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
 from pi_clock import PiClock
 
@@ -8,7 +9,7 @@ from pi_clock import PiClock
 class App():
     
     def __init__(self) -> None:
-        self.root = tk.Tk()
+        self.root = ttk.Window(themename="darkly")
         self.pi_clock = PiClock()
 
         self.style = None
@@ -41,38 +42,56 @@ class App():
         self.root.after(10, self.update_progress_bars)
 
     def _configure_root(self):
+        # self.style = ttk.Style(self.root)
+
+
         self.root.title("PiClock")
         # Make the window borderless (optional)
         self.root.attributes('-fullscreen', True)
 
-        self.style = ttk.Style(self.root)
-
         # using 3rd party theme
-        self.root.call('source', 'Themes/azure/azure.tcl')
+        self.root.call('source', 'Themes/sun-valley/sun-valley.tcl')
         self.root.call('set_theme', 'dark')
+        # self.style.theme_use('clam') 
+
+        # self.style.configure("CustomTProgressbar",
+        #                      troughcolor ='blue', 
+        #                      background='green') 
+
+
 
         
     def create_labels(self):
         # Create a label for displaying the time
-        self.clock_label = tk.Label(self.root, font=('Helvetica', 48))
+        self.clock_label = ttk.Label(self.root, font=('Helvetica', 48))
         self.clock_label.pack(pady=20)  # Add some padding to center the time label
-
 
 
         # Create a frame for the progress bars
         progress_frame = ttk.Frame(self.root )
-        progress_frame.pack(pady=20, padx=20, fill=tk.X, side=tk.BOTTOM, anchor=tk.S)  # Stick to the bottom
-        
-        self.style.configure('TProgressbar', troughcolor='red', background='red', thickness=30)
+        progress_frame.pack(pady=20, padx=20, fill=ttk.X, side=ttk.BOTTOM, anchor=ttk.S)  # Stick to the bottom
         
         for label in self.progress_labels:
-            tk.Label(progress_frame, text=label).pack()
+            ttk.Label(progress_frame, text=label).pack()
             progress_bar = ttk.Progressbar(progress_frame, 
-                                           style="TProgressbar", 
-                                           orient='horizontal', length=300, 
+                                           orient='horizontal', length=300,
                                            mode='determinate')
-            progress_bar.pack(pady=5, fill=tk.X)
+            progress_bar.pack(pady=5, fill=ttk.X)
             self.progress_bars.append(progress_bar)
+
+        # create meter widget
+        meter = ttk.Meter(self.root,
+                            metertype = 'semi',
+                            textright='%',
+                            # stripethickness = 5,
+                            subtext="miles per hour",
+                            textfont=('Helvetica', 25),
+                            subtextfont=('Helvetica', 12),
+                            amountused=65,
+                            metersize=180,
+                            meterthickness=15)
+        
+        meter.pack(pady=20, padx=20, fill=ttk.X, side=ttk.BOTTOM, anchor=ttk.S)
 
 
 if __name__ == '__main__':
