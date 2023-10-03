@@ -40,10 +40,16 @@ class App():
 
         # Add widgets to the pop-up window
         self.wake_label = ttk.Label(self.popup, text="WAKE UP!", font=('Helvetica', 64))
-        self.wake_label.pack(padx=20, pady=20)
+        self.wake_label.pack(padx=20, pady=25)
 
-        close_button = ttk.Button(self.popup, text="Close", command=self.close_popup)
-        close_button.pack(pady=10)
+
+        ttk.Style().configure('danger.TButton', font=('Helvetica', 64))
+        close_button = ttk.Button(self.popup, 
+                                  text="Close", 
+                                  width=30,
+                                  style='danger.TButton',
+                                  command=self.close_popup)
+        close_button.pack(pady=30,side=ttk.BOTTOM, anchor=ttk.S)
         self.alarm()
 
     def alarm(self):
@@ -51,25 +57,29 @@ class App():
         # pick random color
         color = random.choice(colors)
 
-        self.wake_label.config(bootstyle=color)
-
         if self.pi_clock.keep_playing:
+            self.wake_label.config(bootstyle=color)
             if not self.pi_clock.yt_music.is_playing():
-                print('currnetly playing')
                 self.root.after(1000, self.alarm)
                 return
             else:
                 self.pi_clock.yt_music.play_song(self.pi_clock.wake_url)
                 self.root.after(1000, self.alarm)
                 return
+        else:
+            return
 
 
     def close_popup(self):
-        # destroy the pop-up window
-        self.popup.destroy()
         # end the music
         self.pi_clock.yt_music.stop_song()
         self.pi_clock.keep_playing = False
+
+        # destroy the pop-up window
+        self.wake_label.destroy()
+        self.popup.destroy()
+        self.popup = None
+        self.wake_label = None
 
 
     # Function to update progress bars
@@ -77,7 +87,7 @@ class App():
 
         # Get the current time and progress
         info = self.pi_clock.update_time()
-        if self.pi_clock.check_time():
+        if self.pi_clock.check_alarm():
             #TODO : write stuff
             self.open_popup()
 

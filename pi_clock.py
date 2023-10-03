@@ -61,7 +61,7 @@ class PiClock:
 
         return info
     
-    def check_time(self):
+    def check_alarm(self):
         '''
         Function for checking the time
         '''
