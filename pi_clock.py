@@ -16,6 +16,7 @@ class PiClock:
         self.wake_hour = datetime.now().replace(hour=7, minute=0)
         self.sleep_hour = datetime.now().replace(hour=0, minute=30)
         self.asleep = False
+        self.keep_playing = False
 
         self.wake_url = 'https://www.youtube.com/watch?v=h8nIHZ-0kS4'
         self.sleep_url = 'https://www.youtube.com/watch?v=teIbh8hFQos'
@@ -44,7 +45,7 @@ class PiClock:
 
 
         # TODO: add this to sleep clock class
-        self.check_time()
+        # wake_up_bool = self.check_time()
 
         info = {
             'time': curr_formatted_time,
@@ -55,7 +56,7 @@ class PiClock:
             'year_progress': year_progress,
             'year_left': year_left,
             'deadline_progress': deadline_progress,
-            'deadline_left': deadline_left
+            'deadline_left': deadline_left,
         }
 
         return info
@@ -70,16 +71,18 @@ class PiClock:
 
         if (curr_time.minute == self.wake_hour.minute and
         curr_time.hour == self.wake_hour.hour and self.asleep):
-            self.wake_up()
             self.asleep = False
+            self.wake_up()
+            return True
 
         elif (curr_time.minute == self.sleep_hour.minute and
         curr_time.hour == self.sleep_hour.hour and not self.asleep):
-            self.go_sleep()
             self.asleep = True
+            self.go_sleep()
+            return False
 
         else:
-            pass
+            return False
     
     def wake_up(self):
         '''
@@ -87,15 +90,10 @@ class PiClock:
         '''
         # create a thread for playing music
         self.yt_music.play_song(self.wake_url, 3)
-
         # add more here
-
-
-        
         
     def go_sleep(self):
         self.yt_music.play_song(self.sleep_url, 3, 29)
-
         # add more here
 
 

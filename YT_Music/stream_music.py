@@ -50,10 +50,24 @@ class MusicStreamer:
         # while self.player.get_state() != vlc.State.Ended:
         #     pass
 
+    def is_playing(self):
+        if self.player == None:
+            return False
+        if self.player.get_state() == vlc.State.Ended:
+            return True
+        else:
+            return False
+
     def stop_song(self):
         # Release the media player
-        self.player.release()
-        self.player = None
+        if self.player == None:
+            return False
+
+        if self.player.get_state() != vlc.State.Ended:
+            self.player.release()
+            self.player = None
+            return True
+        return False
 
     def download_song(self, youtube_url):
         '''

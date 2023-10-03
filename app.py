@@ -2,6 +2,8 @@
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 
+import random
+
 from pi_clock import PiClock
 
 
@@ -22,6 +24,7 @@ class App():
                 
 
     def start(self):
+        self.pi_clock.start()
         self._configure_root()
         self.create_labels()
         self.update_progress_bars()
@@ -29,11 +32,55 @@ class App():
         # running tkinter mainloop
         self.root.mainloop()
 
+    # Function to open the pop-up window
+    def open_popup(self):
+        self.pi_clock.keep_playing = True
+        self.popup = ttk.Toplevel(self.root)
+        self.popup.title("Alarm")
+
+        # Add widgets to the pop-up window
+        self.wake_label = ttk.Label(self.popup, text="WAKE UP!", font=('Helvetica', 64))
+        self.wake_label.pack(padx=20, pady=20)
+
+        close_button = ttk.Button(self.popup, text="Close", command=self.close_popup)
+        close_button.pack(pady=10)
+        self.alarm()
+
+    def alarm(self):
+        colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
+        # pick random color
+        color = random.choice(colors)
+
+        self.wake_label.config(bootstyle=color)
+
+        if self.pi_clock.keep_playing:
+            if not self.pi_clock.yt_music.is_playing():
+                print('currnetly playing')
+                self.root.after(1000, self.alarm)
+                return
+            else:
+                self.pi_clock.yt_music.play_song(self.pi_clock.wake_url)
+                self.root.after(1000, self.alarm)
+                return
+
+
+    def close_popup(self):
+        # destroy the pop-up window
+        self.popup.destroy()
+        # end the music
+        self.pi_clock.yt_music.stop_song()
+        self.pi_clock.keep_playing = False
+
+
     # Function to update progress bars
     def update_progress_bars(self):
 
         # Get the current time and progress
         info = self.pi_clock.update_time()
+        if self.pi_clock.check_time():
+            #TODO : write stuff
+            self.open_popup()
+
 
         self.clock_label.config(text=info['time'])  
 
@@ -83,7 +130,7 @@ class App():
                                     metertype='semi',
                                     textright='%',
                                     subtext=label,
-                                    textfont=('Helvetica', 18),
+                                    textfont=('Helvetica', 20),
                                     subtextfont=('Helvetica', 12),
                                     amountused=0.00,
                                     metersize=210,
