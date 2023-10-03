@@ -182,6 +182,8 @@ class TrackingClock:
     def get_day_progress(self):            
         # Get the current date and time
         now = datetime.now()
+        # TODO : this is just for debugging
+        # now = now.replace(hour=3, minute=0, second=0)
 
         # Define the time ranges for 12 PM and 9 AM
         twelve_pm = datetime.combine(now, time(0, 0, 0))
@@ -199,9 +201,10 @@ class TrackingClock:
 
         
         # Calculate the time difference in hours
-        diff =  24 - (24 - abs(now.hour - self.day_start))
-        # convert time difference to hours
-        time_difference = diff
+        if now.hour <= self.day_start:
+            time_difference = self.day_start - now.hour
+        else:
+            time_difference = 24 - now.hour + self.day_start
         
         #normalizing the time for progress bar
         norm_time = self.normalize(yesterday, now, tomorrow)
