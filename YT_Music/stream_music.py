@@ -51,6 +51,9 @@ class MusicStreamer:
         #     pass
 
     def is_playing(self):
+        '''
+        Checks if the vlc player is currently active
+        '''
         if self.player == None:
             return False
         if self.player.get_state() == vlc.State.Ended:
