@@ -16,7 +16,7 @@ class App(ttk.Window):
         self.attributes('-fullscreen', True)
         # disabling the cursor
         # TODO : enable this when the app is ready
-        # self.configure(cursor="none")
+        self.configure(cursor="none")
 
 
         # Create a ttk.Notebook to manage multiple pages
