@@ -1,57 +1,91 @@
-# import tkinter as tk
+import tkinter as tk
+from ttkbootstrap import Style
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 
-import random
+from GUI.Screens import *
 
+import random
 from pi_clock import PiClock
 
+class App(ttk.Window):
+    def __init__(self):
+        super().__init__(title="Life Clock", 
+                         themename="darkly")
+        # setting the app to fullscreen
+        self.attributes('-fullscreen', True)
+        # disabling the cursor
+        # TODO : enable this when the app is ready
+        # self.configure(cursor="none")
 
-# TODO : need to inherit the tkinter class
-class App():
-    
-    def __init__(self) -> None:
-        self.root = ttk.Window(themename="darkly")
+
+        # Create a ttk.Notebook to manage multiple pages
+        self.notebook = ttk.Notebook(self)
+        self.notebook.pack(fill=tk.BOTH, expand=True)
+
+
+        # Customize the font for the tab labels
+        style = Style()
+        style.configure('TNotebook.Tab', font=('Helvetica', 32) )
+        # center tabs on the page
+        style.configure("TNotebook", tabposition='n')
+        # change the background color of the tab adding space between the top of the screen
+        style.configure('TNotebook', bordercolor='darkly', padding=5)
+        
+        # TODO : clean up this mess
+
+        # Add the HomeScreen and Page2 frames to the self.notebook
+        self.home_screen = HomeScreen(self.notebook)
+        self.alarm_screen = AlarmScreen(self.notebook)
+        self.stats_screen = StatsScreen(self.notebook)
+        self.notebook.add(self.alarm_screen, text="Alarm")
+        self.notebook.add(self.home_screen, text="Home")
+        self.notebook.add(self.stats_screen, text="Stats")
+
+        self.notebook.select(self.home_screen)
+
+        # adding my clock class
         self.pi_clock = PiClock()
-
-        self.style = None
-
-        self.clock_label = None
-        self.progress_labels = ['Day Progress', 'Month Progress', 'Year Progress', 'Deadline Progress']
-        self.progress_bars = []
-
-        self.old_progress_vals = [0, 0, 0, 0]
-                
-
-    def start(self):
         self.pi_clock.start()
-        self._configure_root()
-        self.create_labels()
+
+        # initializing the text for the app
         self.update_progress_bars()
 
-        # running tkinter mainloop
-        self.root.mainloop()
 
-    # Function to open the pop-up window
-    def open_popup(self):
-        self.pi_clock.keep_playing = True
-        self.popup = ttk.Toplevel(self.root)
-        self.popup.title("Alarm")
+    # Function to update progress bars
+    # TODO : This is everywhere, make sure it belongs in this class or the homescreen!
+    def update_progress_bars(self):
 
-        # Add widgets to the pop-up window
-        self.wake_label = ttk.Label(self.popup, text="WAKE UP!", font=('Helvetica', 64))
-        self.wake_label.pack(padx=20, pady=25)
+        # Get the current time and progress
+        info = self.pi_clock.update_time()
+        # checking if its wake up time
+        # print('waiting')
+        if self.pi_clock.check_alarm():
+            print("********Alarm time!")
+            self.activate_alarm()
 
 
-        ttk.Style().configure('danger.TButton', font=('Helvetica', 64))
-        close_button = ttk.Button(self.popup, 
-                                  text="Close", 
-                                  width=30,
-                                  style='danger.TButton',
-                                  command=self.close_popup)
-        close_button.pack(pady=30,side=ttk.BOTTOM, anchor=ttk.S)
-        self.alarm()
+        self.home_screen.clock_label.config(text=info['time'])  
 
+        for i, label in enumerate(self.home_screen.progress_labels):
+            lebel_text = label.lower().replace(' ', '_')
+            value = info[lebel_text] * 100
+            # round to nearest 2 decimal places
+            value = round(value, 2)
+            # only update if the value has changed
+            if value != self.home_screen.old_progress_vals[i]:
+                self.home_screen.old_progress_vals[i] = value
+                time_left = info[lebel_text.replace('progress', 'left')]
+                # TODO : Come up with a better way to do this
+                if i == 0:
+                    text = f'{label}:\nhours left {time_left}h'
+                else:
+                    text = f'{label}:\ndays left {time_left}d'
+                self.home_screen.progress_bars[i].configure(amountused = value, subtext=text )
+                self.home_screen.progress_bars[i].update()
+        self.after(10, self.update_progress_bars)
+
+    # TODO : This should be in the alarm screen class
     def alarm(self):
         colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger', 'light', 'dark']
         # pick random color
@@ -60,96 +94,53 @@ class App():
         if self.pi_clock.keep_playing:
             self.wake_label.config(bootstyle=color)
             if not self.pi_clock.yt_music.is_playing():
-                self.root.after(1000, self.alarm)
+                self.after(1000, self.alarm)
                 return
             else:
                 self.pi_clock.yt_music.play_song(self.pi_clock.wake_url)
-                self.root.after(1000, self.alarm)
+                self.after(1000, self.alarm)
                 return
         else:
             return
+        
+    # TODO : This should be in the alarm screen class
+    def activate_alarm(self):
+        self.pi_clock.keep_playing = True
+        self.notebook.select(self.alarm_screen)
 
+        self.wake_label = ttk.Label(self.alarm_screen, text="WAKE UP!", font=('Helvetica', 64))
+        self.wake_label.pack(padx=20, pady=25)
+        ttk.Style().configure('danger.TButton', font=('Helvetica', 64))
 
-    def close_popup(self):
+        self.alarm_close_button = ttk.Button(self.alarm_screen, 
+                                  text="Close", 
+                                  width=30,
+                                  style='danger.TButton',
+                                  command=self.deactivate_alarm)
+        self.alarm_close_button.pack(pady=30,side=ttk.BOTTOM, anchor=ttk.S)
+        
+        # calling the music
+        self.alarm()
+
+    # TODO : This should be in the alarm screen class
+    def deactivate_alarm(self):
         # end the music
         self.pi_clock.yt_music.stop_song()
         self.pi_clock.keep_playing = False
 
         # destroy the pop-up window
+        self.alarm_close_button.destroy()
         self.wake_label.destroy()
-        self.popup.destroy()
-        self.popup = None
         self.wake_label = None
 
+        # TODO : replace destroy with this so we dont have to save widgets in class
+        # for widgets in frame.winfo_children():
+        #     widgets.destroy()
 
-    # Function to update progress bars
-    def update_progress_bars(self):
+        # return to homepage 
+        self.notebook.select(self.home_screen)
 
-        # Get the current time and progress
-        info = self.pi_clock.update_time()
-        if self.pi_clock.check_alarm():
-            #TODO : write stuff
-            self.open_popup()
-
-
-        self.clock_label.config(text=info['time'])  
-
-        for i, label in enumerate(self.progress_labels):
-            lebel_text = label.lower().replace(' ', '_')
-            value = info[lebel_text] * 100
-            # round to nearest 2 decimal places
-            value = round(value, 2)
-            # only update if the value has changed
-            if value != self.old_progress_vals[i]:
-                self.old_progress_vals[i] = value
-                time_left = info[lebel_text.replace('progress', 'left')]
-                # TODO : Come up with a better way to do this
-                if i == 0:
-                    text = f'{label}:\nhours left {time_left}h'
-                else:
-                    text = f'{label}:\ndays left {time_left}d'
-                self.progress_bars[i].configure(amountused = value, subtext=text )
-                self.progress_bars[i].update()
-        self.root.after(10, self.update_progress_bars)
-
-    def _configure_root(self):
-        # self.style = ttk.Style(self.root)
-        self.root.title("PiClock")
-        # Make the window borderless (optional)
-        self.root.attributes('-fullscreen', True)
-
-        
-    def create_labels(self):
-        # Create a label for displaying the time
-        self.clock_label = ttk.Label(self.root, font=('Helvetica', 48))
-        # Add some padding to center the time label
-        self.clock_label.pack(pady=25)  
-
-        # Create a frame for the progress bars
-        progress_frame = ttk.Frame(self.root)
-        progress_frame.pack(pady=20, padx=20, fill=ttk.X, side=ttk.BOTTOM, anchor=ttk.S)  # Stick to the bottom
-
-        # Create a horizontal frame to hold the progress bars
-        horizontal_frame = ttk.Frame(progress_frame)
-        horizontal_frame.pack(fill=ttk.X)
-
-        color = ['primary', 'primary', 'primary', 'info']
-        for i, label in enumerate(self.progress_labels):
-            # Create meter widget
-            progress_bar = ttk.Meter(horizontal_frame,
-                                    metertype='semi',
-                                    textright='%',
-                                    subtext=label,
-                                    textfont=('Helvetica', 20),
-                                    subtextfont=('Helvetica', 12),
-                                    amountused=0.00,
-                                    metersize=210,
-                                    meterthickness=5,
-                                    bootstyle=color[i])
-            progress_bar.pack(fill="both", side=ttk.LEFT, padx=15)  # Pack horizontally with some padding
-            self.progress_bars.append(progress_bar)
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
+    # style = Style(theme="darkly")
     app = App()
-    app.start()
+    app.mainloop()
