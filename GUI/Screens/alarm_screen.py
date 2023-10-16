@@ -10,6 +10,11 @@ class AlarmScreen(ttk.Frame):
         super().__init__(parent)
         self.clock = clock
 
+        # TODO : Move this 
+        # Create a label
+        label = tk.Label(self, text="Alarms", font=('Helvetica', 48))
+        label.pack(side="top", pady=20)
+
     def create_alarm_widgets(self):
         self.wake_label = ttk.Label(self, text="WAKE UP!", font=('Helvetica', 64))
         self.wake_label.pack(padx=20, pady=25)

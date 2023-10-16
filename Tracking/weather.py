@@ -1,0 +1,3 @@
+
+class WeatherTracker:
+    pass

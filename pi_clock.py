@@ -9,7 +9,7 @@ class PiClock:
     def __init__(self) -> None:
         self.clock = ClockTracker()
         self.yt_music = MusicStreamer()
-        self.warkout = WorkoutTracker()
+        self.workout = WorkoutTracker()
     
         # TODO : add this to sleep clock class
         self.wake_hour = datetime.now().replace(hour=7, minute=0)
