@@ -5,7 +5,7 @@ from time import sleep
 import pickle
 import os
 
-
+# TODO : need to split this class into 2 classes
 class ClockTracker:
 
     # TODO : make format how I want to display
@@ -16,6 +16,26 @@ class ClockTracker:
         self.startup_time = datetime.now()
 
         self.day_start = 9
+
+        self.current_times = {
+            'day':self.startup_time.day,
+            'week':self.startup_time.isocalendar()[1],
+            'month':self.startup_time.month,
+            'year':self.startup_time.year
+        }
+
+    def update_times(self):
+        '''
+        Function for updating the current times
+        '''
+        today = datetime.now()
+
+        self.current_times = {
+            'day':today.day,
+            'week':today.isocalendar()[1],
+            'month':today.month,
+            'year':today.year
+        }
 
 
     def get_deadline(self):
@@ -84,7 +104,7 @@ class ClockTracker:
         Function for getting the current time and displaying it properly
         '''
         current_datetime = datetime.now()
-        formatted_datetime = current_datetime.strftime(TrackingClock.TIME_FORMAT)
+        formatted_datetime = current_datetime.strftime(ClockTracker.TIME_FORMAT)
         return formatted_datetime
 
     def normalize(self, start_time, current_time, end_time):
@@ -169,8 +189,9 @@ class ClockTracker:
         days_left = number_of_days - current_day
         norm_value = self.normalize(first_day, now, last_day)
 
-
         return norm_value, days_left
+    
+    # TODO : add week progress
 
     @staticmethod
     def in_between(now, start, end):
@@ -215,7 +236,7 @@ class ClockTracker:
 
 if __name__ == "__main__":
 
-    clock = TrackingClock()
+    clock = ClockTracker()
     date_string = "7/23/2024"
     clock.create_deadline(date_string)
 
