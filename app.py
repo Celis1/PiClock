@@ -16,6 +16,7 @@ class App(ttk.Window):
 
         self.home_screen = None
         self.alarm_screen = None
+        self.workout_screen = None
         self.stats_screen = None
 
         # adding my clock class
@@ -53,11 +54,13 @@ class App(ttk.Window):
         # Adding screens to notebook
         self.home_screen = HomeScreen(notebook, self.clock)
         self.alarm_screen = AlarmScreen(notebook, self.clock)
+        self.workout_screen = WorkoutScreen(notebook, self.clock)
         self.stats_screen = StatsScreen(notebook, self.clock)
 
         # adding the screens to the notebook
         notebook.add(self.alarm_screen, text="Alarm")
         notebook.add(self.home_screen, text="Home")
+        notebook.add(self.workout_screen, text="Workout")
         notebook.add(self.stats_screen, text="Stats")
 
         notebook.select(self.home_screen)
