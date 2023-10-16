@@ -38,7 +38,7 @@ class WorkoutTracker:
 
         self.is_day_end = False
 
-    def set_day(self, workouts, time_session):
+    def set_workout(self, workouts, time_session):
         '''
         Function for setting the workout and time session for the day
         
@@ -58,7 +58,7 @@ class WorkoutTracker:
                 temp_workouts.append(i)
 
         self.workout_data['day']['workout'] = temp_workouts
-        self.workout_data['day']['time_session'] = timed_session
+        self.workout_data['day']['time_session'] = [timed_session]
 
     def day_end(self):
         '''
@@ -66,15 +66,18 @@ class WorkoutTracker:
         '''
         self.is_day_end = True
 
+        workouts = self.workout_data['day']['workout']
+        workout_session = self.workout_data['day']['time_session'][0]
+
         # TODO : clean this up not modular
-        self.workout_data['week']['workout'].append(self.workout_data['day']['workout'])
-        self.workout_data['week']['time_session'].append(self.workout_data['day']['time_session'][0])
+        self.workout_data['week']['workout'].append(workouts)
+        self.workout_data['week']['time_session'].append(workout_session)
 
-        self.workout_data['month']['workout'].append(self.workout_data['day']['workout'])
-        self.workout_data['month']['time_session'].append(self.workout_data['day']['time_session'][0])
+        self.workout_data['month']['workout'].append(workouts)
+        self.workout_data['month']['time_session'].append(workout_session)
 
-        self.workout_data['year']['workout'].append(self.workout_data['day']['workout'])
-        self.workout_data['year']['time_session'].append(self.workout_data['day']['time_session'][0])
+        self.workout_data['year']['workout'].append(workouts)
+        self.workout_data['year']['time_session'].append(workout_session)
 
         # saving data
         self._save_data()
@@ -100,8 +103,14 @@ class WorkoutTracker:
         '''
         Function for loading the data
         '''
-        if os.path.exists(self.deadline_path):
+        if os.path.exists(self.workout_path):
             with open(self.workout_path, 'rb') as f:
                 self.workout_data = pickle.load(f)
         else:
             print("Workout file does not exist")
+
+
+if __name__ == '__main__':
+    workout = WorkoutTracker()
+    workout.set_workout(['chest', 'back'], '01:00:00')
+    workout.day_end()

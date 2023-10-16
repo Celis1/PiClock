@@ -1,4 +1,4 @@
-from Tracking import ClockTracker
+from Tracking import ClockTracker, WorkoutTracker
 from YT_Music import MusicStreamer
 
 from datetime import datetime
@@ -9,6 +9,7 @@ class PiClock:
     def __init__(self) -> None:
         self.clock = ClockTracker()
         self.yt_music = MusicStreamer()
+        self.warkout = WorkoutTracker()
     
         # TODO : add this to sleep clock class
         self.wake_hour = datetime.now().replace(hour=7, minute=0)
@@ -31,6 +32,7 @@ class PiClock:
         else:
             self.asleep = False
 
+    # TODO : move this to clock.py
     def update_time(self):
         '''
         Function for updating the time
@@ -41,9 +43,6 @@ class PiClock:
         year_progress, year_left = self.clock.year_progress()
         deadline_progress, deadline_left = self.clock.deadline_progress()
 
-
-        # TODO: add this to sleep clock class
-        # wake_up_bool = self.check_time()
 
         info = {
             'time': curr_formatted_time,

@@ -5,7 +5,7 @@ from time import sleep
 import pickle
 import os
 
-
+# TODO : need to split this class into 2 classes
 class ClockTracker:
 
     # TODO : make format how I want to display
@@ -189,8 +189,9 @@ class ClockTracker:
         days_left = number_of_days - current_day
         norm_value = self.normalize(first_day, now, last_day)
 
-
         return norm_value, days_left
+    
+    # TODO : add week progress
 
     @staticmethod
     def in_between(now, start, end):
