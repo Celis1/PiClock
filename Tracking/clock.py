@@ -6,7 +6,7 @@ import pickle
 import os
 
 
-class TrackingClock:
+class ClockTracker:
 
     # TODO : make format how I want to display
     TIME_FORMAT = "%I:%M:%S %p\n%A, %B %d, %Y"

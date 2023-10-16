@@ -1,15 +1,13 @@
-from Clock import TrackingClock
+from Tracking import ClockTracker
 from YT_Music import MusicStreamer
 
-import time
-import threading
 from datetime import datetime
 
 
 class PiClock:
 
     def __init__(self) -> None:
-        self.clock = TrackingClock()
+        self.clock = ClockTracker()
         self.yt_music = MusicStreamer()
     
         # TODO : add this to sleep clock class
