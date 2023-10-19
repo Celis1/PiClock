@@ -69,3 +69,6 @@ class AlarmScreen(ttk.Frame):
 
         # return to homepage
         self.master.select(1)
+
+        # Starting morning routine
+        self.clock.start_morning_routine()

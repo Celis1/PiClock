@@ -8,7 +8,7 @@ class MusicStreamer:
     def __init__(self) -> None:
         self.music_path = './DATA/MusicData'
         self.player = None
-        self.volumn = 100
+        self.volumn = 70
 
     def set_volumn(self, volume):
         '''

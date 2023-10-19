@@ -1,15 +1,22 @@
-from Tracking import ClockTracker, WorkoutTracker
+from Tracking import ClockTracker, WorkoutTracker, SleepTracker, WeatherTracker
 from YT_Music import MusicStreamer
 
+# Importing TTS
+from speech import TextToSpeech as tts
+
 from datetime import datetime
+import threading
 
 
 class PiClock:
 
     def __init__(self) -> None:
+        # Importing trackers
         self.clock = ClockTracker()
         self.yt_music = MusicStreamer()
         self.workout = WorkoutTracker()
+        # TODO : need a way to allow this to fail without breaking system
+        self.weather = WeatherTracker('./config.ini')
     
         # TODO : add this to sleep clock class
         self.wake_hour = datetime.now().replace(hour=7, minute=0)
@@ -93,9 +100,28 @@ class PiClock:
         self.yt_music.play_song(self.sleep_url, 3, 29)
         # add more here
 
+    def start_morning_routine(self):
+        '''
+        Function for starting the morning routine
+        '''
+        if self.weather.update_weather():
+            info = {}
+            time_info = self.update_time()
+            weather_info = self.weather()
 
+            # TODO : find a better way than this
+            info.update(time_info)
+            info.update(weather_info)
+
+            # tts.speak(info)
+            threading.Thread(target=tts.speak, args=(info,)).start()
+
+    
 
 if __name__ == '__main__':
     game = PiClock()
     # game.wake_up()
     game.go_sleep()
+
+
+
