@@ -52,7 +52,9 @@ class PiClock:
 
 
         info = {
+            # TODO : this formated time is annoying, make a function to format for display
             'time': curr_formatted_time,
+            'current_time': datetime.now(),
             'day_progress': day_progress,
             'day_left': day_left,
             'month_progress': month_progress,
@@ -116,7 +118,7 @@ class PiClock:
             # tts.speak(info)
             threading.Thread(target=tts.speak, args=(info,)).start()
 
-    
+
 
 if __name__ == '__main__':
     game = PiClock()
