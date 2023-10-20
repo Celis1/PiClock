@@ -52,7 +52,7 @@ class HomeScreen(ttk.Frame):
     # TODO : This is everywhere, make sure it belongs in this class or the homescreen!
     def update_progress_bars(self):
         # Get the current time and progress
-        info = self.chronos.update_time()
+        info = self.chronos.clock()
 
         self.clock_label.config(text=info['time'])  
 

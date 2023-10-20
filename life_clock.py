@@ -44,42 +44,12 @@ class LifeClock:
         self.clock.day_end = self.sleep.wake_hour.hour
 
         # TODO : fetch the current weather so we can update the app later
-
-
-    # TODO : move this to clock.py
-    def update_time(self):
-        '''
-        Function for updating the time
-        '''
-        curr_formatted_time = self.clock.get_time()
-        day_progress, day_left = self.clock.get_day_progress()
-        month_progress, month_left = self.clock.month_progress()
-        year_progress, year_left = self.clock.year_progress()
-        deadline_progress, deadline_left = self.clock.deadline_progress()
-
-
-        info = {
-            # TODO : this formated time is annoying, make a function to format for display
-            'time': curr_formatted_time,
-            'current_time': datetime.now(),
-            'day_progress': day_progress,
-            'day_left': day_left,
-            'month_progress': month_progress,
-            'month_left': month_left,
-            'year_progress': year_progress,
-            'year_left': year_left,
-            'deadline_progress': deadline_progress,
-            'deadline_left': deadline_left,
-        }
-
-        return info
     
     # TODO: add this to sleep clock class
     def check_alarm(self):
         '''
         Function for checking the time
         '''
-        
         
         curr_time = datetime.now()
 
@@ -119,7 +89,7 @@ class LifeClock:
         '''
         if self.weather.update_weather():
             info = {}
-            time_info = self.update_time()
+            time_info = self.clock()
             weather_info = self.weather()
 
             # TODO : find a better way than this
