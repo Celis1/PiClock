@@ -1,4 +1,3 @@
-
 import os
 from typing import Any
 import geocoder
@@ -7,13 +6,15 @@ import configparser
 
 # TODO : need to know if this will fail without internet
 class WeatherTracker:
-    BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
+    BASE_URL = "http://api.weatherstack.com/current?access_key="
     
     def __init__(self, config_file) -> None:
         self.api_key = self._get_key(config_file)
         self.location = geocoder.ip('me')
         self.city_name = self.location.city
-        self.url = self.BASE_URL + "appid=" + self.api_key + "&q=" + self.city_name
+        self.state = self.location.state
+        print(self.city_name, self.state)
+        self.url = self.BASE_URL + self.api_key + "&query=" + self.city_name + "," + self.state
         self.weather = {
             'temperature': None,
             'pressure': None,
@@ -26,29 +27,36 @@ class WeatherTracker:
 
     def update_weather(self, fahrenheit = True):
         response = requests.get(self.url)
-        x = response.json()
-        if x["cod"] != "404":        
-            y = x["main"]
+        if response.status_code == 200:
+            data = response.json()
+            # TODO : remove for debugging
+            print(data)
             
-            if fahrenheit:
-                # convert temp to fahrenheit
-                temperature = y["temp"] * 9/5 - 459.67
-            else:
-                # TODO : verify that this is correct
-                # use celcius
-                temperature = y["temp"] - 273.15
+            if 'current' in data:
+                current_weather = data['current']
+                # convert to fahrenheit
+                if fahrenheit:
+                    temperature = current_weather['temperature'] * 9/5 + 32
+                else:
+                    temperature = current_weather['temperature']
 
-            self.weather['temperature'] = temperature
-            self.weather['pressure'] = y["pressure"]
-            self.weather['humidity'] = y["humidity"]
-        
-            z = x["weather"]
-            self.weather['description'] = z[0]["description"]
-            return True
-        
+                description = current_weather['weather_descriptions'][0]
+                humidity = current_weather['humidity']
+                
+                self.weather['temperature'] = temperature
+                self.weather['description'] = description
+                self.weather['humidity'] = humidity
+
+
+                # TODO : remove for debugging
+                print(f'Current weather in {self.city_name}:')
+                print(f'Temperature: {temperature}°F')
+                print(f'Description: {description}')
+                print(f'Humidity: {humidity}%')
+            else:
+                print('No current weather data available for this location.')
         else:
-            print(" City Not Found ")
-            return False
+            print(f'Failed to retrieve weather data. Status code: {response.status_code}')
 
     def _get_key(self, config_file):
         '''
@@ -65,6 +73,6 @@ class WeatherTracker:
 
 
 if __name__ == "__main__":
-    weather = WeatherTracker()
+    weather = WeatherTracker('./config.ini')
     weather.update_weather()
     print(weather())
