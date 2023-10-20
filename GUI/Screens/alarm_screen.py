@@ -5,7 +5,7 @@ from ttkbootstrap.constants import *
 
 import random
 
-class AlarmScreen(ttk.Frame):
+class SleepScreen(ttk.Frame):
     def __init__(self, parent, clock):
         super().__init__(parent)
         self.chronos = clock

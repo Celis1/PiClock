@@ -8,7 +8,7 @@ from datetime import datetime
 import threading
 
 
-class LifeClock:
+class Chronos:
 
     def __init__(self) -> None:
         # Importing trackers
@@ -67,7 +67,7 @@ class LifeClock:
 
 if __name__ == '__main__':
     import time
-    game = LifeClock()
+    game = Chronos()
     # game.wake_up()
     # game.go_sleep()
     game.start_morning_routine()
