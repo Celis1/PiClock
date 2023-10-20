@@ -5,7 +5,7 @@ from ttkbootstrap.constants import *
 
 from GUI.Screens import *
 
-from pi_clock import LifeClock
+from life_clock import LifeClock
 
 class App(ttk.Window):
     def __init__(self):
