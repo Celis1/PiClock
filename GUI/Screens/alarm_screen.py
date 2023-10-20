@@ -53,12 +53,21 @@ class AlarmScreen(ttk.Frame):
             return
         
     def activate_alarm(self):
-        self.chronos.keep_playing = True
-        self.master.select(0)
-        self.create_alarm_widgets()
+        # check if its wake time or sleep time
+        if self.chronos.sleep.asleep:
+            self.chronos.yt_music.play_song(self.chronos.sleep_url, 3, 29)
 
-        # calling the music
-        self.alarm()
+        else:
+            # play the music
+            self.chronos.yt_music.play_song(self.chronos.wake_url, 3)
+
+            # allow looping music if not waking
+            self.chronos.keep_playing = True
+            self.master.select(0)
+            self.create_alarm_widgets()
+
+            # calling the music
+            self.alarm()
         
     def deactivate_alarm(self):
         # end the music

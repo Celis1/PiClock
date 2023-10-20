@@ -41,6 +41,7 @@ class TextToSpeech:
                 '''
 
         try:
+            print('now generating audio')
             tts = gTTS(text=text, lang="en", slow=False)
             tts.save("text.mp3")
         except Exception as e:

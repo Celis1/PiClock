@@ -37,7 +37,7 @@ class App(ttk.Window):
         Main update function for app control
         '''
         # checking if its wake up time
-        if self.chronos.check_alarm():
+        if self.chronos.sleep.check_alarm():
             print("********Alarm time!")
             self.alarm_screen.activate_alarm()
 

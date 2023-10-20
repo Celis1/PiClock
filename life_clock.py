@@ -44,44 +44,6 @@ class LifeClock:
         self.clock.day_end = self.sleep.wake_hour.hour
 
         # TODO : fetch the current weather so we can update the app later
-    
-    # TODO: add this to sleep clock class
-    def check_alarm(self):
-        '''
-        Function for checking the time
-        '''
-        
-        curr_time = datetime.now()
-
-        if (curr_time.minute == self.sleep.wake_hour.minute and
-        curr_time.hour == self.sleep.wake_hour.hour and self.sleep.asleep):
-            self.sleep.asleep = False
-            self.wake_up()
-            return True
-
-        elif (curr_time.minute == self.sleep.sleep_hour.minute and
-        curr_time.hour == self.sleep.sleep_hour.hour and not self.sleep.asleep):
-            self.sleep.asleep = True
-            self.go_sleep()
-            return False
-
-        else:
-            return False
-    
-    # TODO : we dont need a wake up and morning routine
-    def wake_up(self):
-        '''
-        Function for waking up the user
-        '''
-        # TODO : there is probably going to be a wake up routine
-        # create a thread for playing music
-        self.yt_music.play_song(self.wake_url, 3)
-        # add more here
-        
-    def go_sleep(self):
-        # TODO : there is probably going to be a sleep routine
-        self.yt_music.play_song(self.sleep_url, 3, 29)
-        # add more here
 
     def start_morning_routine(self):
         '''
@@ -97,14 +59,18 @@ class LifeClock:
             info.update(weather_info)
 
             # tts.speak(info)
+            print('---- start speaking ----')
             threading.Thread(target=tts.speak, args=(info,)).start()
 
 
 
 if __name__ == '__main__':
+    import time
     game = LifeClock()
     # game.wake_up()
-    game.go_sleep()
+    # game.go_sleep()
+    game.start_morning_routine()
+
 
 
 
