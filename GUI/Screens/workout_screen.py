@@ -44,14 +44,14 @@ class InputeTimeWidget:
 class WorkoutScreen(ttk.Frame):
     def __init__(self, parent, clock):
         super().__init__(parent)
-        self.clock = clock
+        self.chronos = clock
 
         # Create a label
         label = tk.Label(self, text="Workout Tracker", font=('Helvetica', 48))
         label.grid(row=0, column=0, columnspan=3, pady=(20, 0))
 
         self.selected_workouts = []
-        for i, workout in enumerate(self.clock.workout.workouts):
+        for i, workout in enumerate(self.chronos.workout.workouts):
             workout_text = workout.capitalize() 
             checkbox = tk.Checkbutton(self, text=workout_text, 
                                       variable=tk.BooleanVar(), 
@@ -76,7 +76,7 @@ class WorkoutScreen(ttk.Frame):
 
         # Create a button to save the workout
         # TODO : add saving workout to app
-        # save_button = ttk.Button(frame, text="Save Workout", command= lambda : self.clock.workout.set_workout())
+        # save_button = ttk.Button(frame, text="Save Workout", command= lambda : self.chronos.workout.set_workout())
         # save_button.grid(row=curr_row+2, column=1, pady=10)
 
         # Center-align the grid

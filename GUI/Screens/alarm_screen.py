@@ -8,7 +8,7 @@ import random
 class AlarmScreen(ttk.Frame):
     def __init__(self, parent, clock):
         super().__init__(parent)
-        self.clock = clock
+        self.chronos = clock
 
         # TODO : Move this 
         # Create a label
@@ -40,20 +40,20 @@ class AlarmScreen(ttk.Frame):
         # pick random color
         color = random.choice(colors)
 
-        if self.clock.keep_playing:
+        if self.chronos.keep_playing:
             self.wake_label.config(bootstyle=color)
-            if not self.clock.yt_music.is_playing():
+            if not self.chronos.yt_music.is_playing():
                 self.after(1000, self.alarm)
                 return
             else:
-                self.clock.yt_music.play_song(self.clock.wake_url)
+                self.chronos.yt_music.play_song(self.chronos.wake_url)
                 self.after(1000, self.alarm)
                 return
         else:
             return
         
     def activate_alarm(self):
-        self.clock.keep_playing = True
+        self.chronos.keep_playing = True
         self.master.select(0)
         self.create_alarm_widgets()
 
@@ -62,8 +62,8 @@ class AlarmScreen(ttk.Frame):
         
     def deactivate_alarm(self):
         # end the music
-        self.clock.yt_music.stop_song()
-        self.clock.keep_playing = False
+        self.chronos.yt_music.stop_song()
+        self.chronos.keep_playing = False
 
         self.destroy_alarm_widgets()
 
@@ -71,4 +71,4 @@ class AlarmScreen(ttk.Frame):
         self.master.select(1)
 
         # Starting morning routine
-        self.clock.start_morning_routine()
+        self.chronos.start_morning_routine()
