@@ -8,17 +8,18 @@ from datetime import datetime
 import threading
 
 
-class LifeClock:
+class Chronos:
 
     def __init__(self) -> None:
         # Importing trackers
         self.clock = ClockTracker()
         self.sleep = SleepTracker()
-        self.yt_music = MusicStreamer()
         self.workout = WorkoutTracker()
         # TODO : need a way to allow this to fail without breaking system
         self.weather = WeatherTracker('./config.ini')
-    
+
+        self.yt_music = MusicStreamer()
+
         # public variables
         self.keep_playing = False
 
@@ -43,7 +44,7 @@ class LifeClock:
         self.clock.day_start = self.sleep.sleep_hour.hour
         self.clock.day_end = self.sleep.wake_hour.hour
 
-        # TODO : fetch the current weather so we can update the app later
+        # TODO : fetch the current weather so we can update the app
 
     def start_morning_routine(self):
         '''
@@ -66,7 +67,7 @@ class LifeClock:
 
 if __name__ == '__main__':
     import time
-    game = LifeClock()
+    game = Chronos()
     # game.wake_up()
     # game.go_sleep()
     game.start_morning_routine()

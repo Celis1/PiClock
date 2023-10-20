@@ -5,7 +5,7 @@ from ttkbootstrap.constants import *
 
 from GUI.Screens import *
 
-from life_clock import LifeClock
+from chronos import Chronos
 
 class App(ttk.Window):
     def __init__(self):
@@ -20,7 +20,7 @@ class App(ttk.Window):
         self.stats_screen = None
 
         # adding my clock class
-        self.chronos = LifeClock()
+        self.chronos = Chronos()
         self.chronos.start()
 
         # adding the style
@@ -53,12 +53,12 @@ class App(ttk.Window):
 
         # Adding screens to notebook
         self.home_screen = HomeScreen(notebook, self.chronos)
-        self.alarm_screen = AlarmScreen(notebook, self.chronos)
+        self.alarm_screen = SleepScreen(notebook, self.chronos)
         self.workout_screen = WorkoutScreen(notebook, self.chronos)
         self.stats_screen = StatsScreen(notebook, self.chronos)
 
         # adding the screens to the notebook
-        notebook.add(self.alarm_screen, text="Alarm")
+        notebook.add(self.alarm_screen, text="Sleep")
         notebook.add(self.home_screen, text="Home")
         notebook.add(self.workout_screen, text="Workout")
         notebook.add(self.stats_screen, text="Stats")

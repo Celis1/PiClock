@@ -5,7 +5,7 @@ from ttkbootstrap.constants import *
 
 import random
 
-class AlarmScreen(ttk.Frame):
+class SleepScreen(ttk.Frame):
     def __init__(self, parent, clock):
         super().__init__(parent)
         self.chronos = clock
@@ -63,6 +63,9 @@ class AlarmScreen(ttk.Frame):
 
             # allow looping music if not waking
             self.chronos.keep_playing = True
+
+            #TODO : only this functionality is part of the gui
+            # i think we need to move the top part in to the life clock class
             self.master.select(0)
             self.create_alarm_widgets()
 
@@ -74,6 +77,9 @@ class AlarmScreen(ttk.Frame):
         self.chronos.yt_music.stop_song()
         self.chronos.keep_playing = False
 
+
+        #TODO : only this functionality is part of the gui
+        # i think we need to move the top part in to the life clock class
         self.destroy_alarm_widgets()
 
         # return to homepage
