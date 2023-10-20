@@ -5,7 +5,7 @@ from ttkbootstrap.constants import *
 
 from GUI.Screens import *
 
-from pi_clock import PiClock
+from life_clock import LifeClock
 
 class App(ttk.Window):
     def __init__(self):
@@ -20,8 +20,8 @@ class App(ttk.Window):
         self.stats_screen = None
 
         # adding my clock class
-        self.clock = PiClock()
-        self.clock.start()
+        self.chronos = LifeClock()
+        self.chronos.start()
 
         # adding the style
         self._configure_style()
@@ -37,7 +37,7 @@ class App(ttk.Window):
         Main update function for app control
         '''
         # checking if its wake up time
-        if self.clock.check_alarm():
+        if self.chronos.check_alarm():
             print("********Alarm time!")
             self.alarm_screen.activate_alarm()
 
@@ -52,10 +52,10 @@ class App(ttk.Window):
         notebook.pack(fill=tk.BOTH, expand=True)
 
         # Adding screens to notebook
-        self.home_screen = HomeScreen(notebook, self.clock)
-        self.alarm_screen = AlarmScreen(notebook, self.clock)
-        self.workout_screen = WorkoutScreen(notebook, self.clock)
-        self.stats_screen = StatsScreen(notebook, self.clock)
+        self.home_screen = HomeScreen(notebook, self.chronos)
+        self.alarm_screen = AlarmScreen(notebook, self.chronos)
+        self.workout_screen = WorkoutScreen(notebook, self.chronos)
+        self.stats_screen = StatsScreen(notebook, self.chronos)
 
         # adding the screens to the notebook
         notebook.add(self.alarm_screen, text="Alarm")

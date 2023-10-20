@@ -6,7 +6,7 @@ from ttkbootstrap.constants import *
 class HomeScreen(ttk.Frame):
     def __init__(self, parent, clock):
         super().__init__(parent)
-        self.clock = clock
+        self.chronos = clock
         self.clock_label = None
         self.progress_labels = ['Day Progress', 'Month Progress', 
                                 'Year Progress', 'Deadline Progress']
@@ -52,7 +52,7 @@ class HomeScreen(ttk.Frame):
     # TODO : This is everywhere, make sure it belongs in this class or the homescreen!
     def update_progress_bars(self):
         # Get the current time and progress
-        info = self.clock.update_time()
+        info = self.chronos.update_time()
 
         self.clock_label.config(text=info['time'])  
 

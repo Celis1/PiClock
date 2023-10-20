@@ -15,7 +15,9 @@ class ClockTracker:
         self.deadline_path = './DATA/TimeData/deadline.pkl'
         self.startup_time = datetime.now()
 
-        self.day_start = 9
+        self.day_start = 7
+        # TODO : implement this
+        self.day_end = 23
 
         self.current_times = {
             'day':self.startup_time.day,
