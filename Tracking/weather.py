@@ -49,10 +49,10 @@ class WeatherTracker:
 
 
                 # TODO : remove for debugging
-                print(f'Current weather in {self.city_name}:')
-                print(f'Temperature: {temperature}°F')
-                print(f'Description: {description}')
-                print(f'Humidity: {humidity}%')
+                # print(f'Current weather in {self.city_name}:')
+                # print(f'Temperature: {temperature}°F')
+                # print(f'Description: {description}')
+                # print(f'Humidity: {humidity}%')
             else:
                 print('No current weather data available for this location.')
         else:
