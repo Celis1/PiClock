@@ -6,7 +6,7 @@ class SleepTracker:
     
     def __init__(self) -> None:
         # fundamental variables
-        self.wake_hour = datetime.now().replace(hour=4, minute=56)
+        self.wake_hour = datetime.now().replace(hour=7, minute=0)
         self.sleep_hour = datetime.now().replace(hour=0, minute=30)
         self.asleep = False
 
