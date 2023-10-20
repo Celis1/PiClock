@@ -32,15 +32,17 @@ class TextToSpeech:
         project_name = 'begin quote,,, Become Rich and Ripped, end quote,'
 
         text = f'''
-                Good Morning Alex! It's {info['current_time']} am, and here's your morning update.
+                Good Morning Alex! It's {info['current_time'].strftime('%H:%M')} am, and here's your morning update.
                 The current temperature is {info['temperature']}°F with a humidity of {info['humidity']}%.
                 As for the weather, it's {info['description']}.
 
-                Also, a quick project update - you've completed {info['deadline_progress']}% 
-                of your {project_name} project. I think ur falling behind a little ...
+                Also, a quick project update - you've completed {round(info['deadline_progress']*100,2)}% 
+                of your {project_name} project. I think ur falling behind a little ... you better start working or
+                you won't finish on time.
                 '''
 
         try:
+            print('now generating audio')
             tts = gTTS(text=text, lang="en", slow=False)
             tts.save("text.mp3")
         except Exception as e:
@@ -58,12 +60,13 @@ class TextToSpeech:
 
 
 if __name__ == "__main__":
+    import datetime
     info = {
-        'current_time': '9:53',
+        'current_time': datetime.datetime.now(),
         'temperature': 75,
         'humidity': 50,
         'description': 'sunny',
-        'deadline_progress': 0.5
+        'deadline_progress': 0.5342
     }
 
     tts = TextToSpeech()

@@ -53,10 +53,13 @@ class WeatherTracker:
                 # print(f'Temperature: {temperature}°F')
                 # print(f'Description: {description}')
                 # print(f'Humidity: {humidity}%')
+                return True
             else:
                 print('No current weather data available for this location.')
+                return False
         else:
             print(f'Failed to retrieve weather data. Status code: {response.status_code}')
+            return False
 
     def _get_key(self, config_file):
         '''
