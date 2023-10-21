@@ -72,11 +72,20 @@ class App(ttk.Window):
         '''
         # Customize the font for the tab labels
         style = Style()
+
+        # notebook style
         style.configure('TNotebook.Tab', font=('Helvetica', 32) )
         # center tabs on the page
         style.configure("TNotebook", tabposition='n')
         # change the background color of the tab adding space between the top of the screen
         style.configure('TNotebook', bordercolor='darkly', padding=5)
+
+        # workout page styling
+        style.configure('info.Outline.TButton', font=('Helvetica', 24))
+
+
+        # checkbox style
+        # style.configure('info.TToolbutton', font=('Helvetica', 32))
 
 
 

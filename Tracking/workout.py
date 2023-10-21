@@ -82,6 +82,8 @@ class WorkoutTracker:
         # saving data
         self._save_data()
 
+        # TODO : this might need to check which other days are ending
+        # TODO : this functionality might need to be built into chronos
         # reset day
         self._reset('day')
 
