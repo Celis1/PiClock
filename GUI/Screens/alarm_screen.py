@@ -56,6 +56,7 @@ class SleepScreen(ttk.Frame):
         # check if its wake time or sleep time
         if self.chronos.sleep.asleep:
             self.chronos.yt_music.play_song(self.chronos.sleep_url, 3, 29)
+            self.chronos.workout.day_end() # TODO : verify if this works
 
         else:
             # play the music
