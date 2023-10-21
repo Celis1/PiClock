@@ -1,5 +1,3 @@
-import tkinter as tk
-from ttkbootstrap import Style
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
 
@@ -12,7 +10,7 @@ class SleepScreen(ttk.Frame):
 
         # TODO : Move this 
         # Create a label
-        label = tk.Label(self, text="Alarms", font=('Helvetica', 48))
+        label = ttk.Label(self, text="Alarms", font=('Helvetica', 48))
         label.pack(side="top", pady=20)
 
     def create_alarm_widgets(self):
