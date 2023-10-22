@@ -3,6 +3,8 @@ from ttkbootstrap.constants import *
 
 import random
 
+
+# TODO : need a way to play white noise, or music to sleep to
 class SleepScreen(ttk.Frame):
     def __init__(self, parent, clock):
         super().__init__(parent)
