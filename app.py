@@ -55,12 +55,14 @@ class App(ttk.Window):
         self.home_screen = HomeScreen(notebook, self.chronos)
         self.alarm_screen = SleepScreen(notebook, self.chronos)
         self.workout_screen = WorkoutScreen(notebook, self.chronos)
+        self.music_screen = MusicScreen(notebook, self.chronos)
         self.stats_screen = StatsScreen(notebook, self.chronos)
 
         # adding the screens to the notebook
         notebook.add(self.alarm_screen, text="Sleep")
         notebook.add(self.home_screen, text="Home")
         notebook.add(self.workout_screen, text="Workout")
+        notebook.add(self.music_screen, text="Music")
         notebook.add(self.stats_screen, text="Stats")
 
         notebook.select(self.home_screen)
