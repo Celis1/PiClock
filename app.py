@@ -5,7 +5,7 @@ from ttkbootstrap.constants import *
 
 from GUI.Screens import *
 
-from chronos import Chronos
+from Kronos.Kronos import Chronos
 
 class App(ttk.Window):
     def __init__(self):

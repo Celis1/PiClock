@@ -1,8 +1,8 @@
-from Tracking import ClockTracker, WorkoutTracker, SleepTracker, WeatherTracker
+from Trackers import ClockTracker, WorkoutTracker, SleepTracker, WeatherTracker
 from YT_Music import MusicStreamer
 
 # Importing TTS
-from speech import TextToSpeech as tts
+from Kronos.speech import TextToSpeech as tts
 
 from datetime import datetime
 import threading
